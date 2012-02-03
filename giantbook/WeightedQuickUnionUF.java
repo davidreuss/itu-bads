@@ -11,14 +11,14 @@ public class WeightedQuickUnionUF {
     private int[] id;    // id[i] = parent of i
     private int[] sz;    // sz[i] = number of objects in subtree rooted at i
     private int count;   // number of components
-	
-	private int total;
-	
-	private boolean giantComponentReached = false;
+
+    private int total;
+
+    private boolean giantComponentReached = false;
 
     // Create an empty union find data structure with N isolated sets.
     public WeightedQuickUnionUF(int N) {
-		total = N;
+        total = N;
         count = N;
         id = new int[N];
         sz = new int[N];
@@ -27,10 +27,10 @@ public class WeightedQuickUnionUF {
             sz[i] = 1;
         }
     }
-	
-	public boolean isGiantComponentReached() {
-		return giantComponentReached;
-	}
+
+    public boolean isGiantComponentReached() {
+        return giantComponentReached;
+    }
 
     // Return the number of disjoint sets.
     public int count() {
@@ -58,19 +58,19 @@ public class WeightedQuickUnionUF {
 
         // make smaller root point to larger one
         if (sz[i] < sz[j]) {
-			id[i] = j;
-			sz[j] += sz[i];
-		} else {
-			id[j] = i;
-			sz[i] += sz[j];
-		}
+            id[i] = j;
+            sz[j] += sz[i];
+        } else {
+            id[j] = i;
+            sz[i] += sz[j];
+        }
         count--;
 
-		if (!giantComponentReached) {
-			if (sz[i] >= total / 2) {
-				giantComponentReached = true;
-			}
-		}
+        if (!giantComponentReached) {
+            if (sz[i] >= total / 2) {
+                giantComponentReached = true;
+            }
+        }
     }
 
 
