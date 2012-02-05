@@ -54,8 +54,7 @@ public class WeightedQuickUnionUF {
     // Return component identifier for component containing p
     public int find(int p) {
         while (p != id[p])
-            id[i] = id[id[i]];
-            p = id[p];
+            p = id[id[p]];
         return p;
     }
 
