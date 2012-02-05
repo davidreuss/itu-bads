@@ -11,17 +11,16 @@ public class WeightedQuickUnionUF {
     private int[] id;    // id[i] = parent of i
     private int[] sz;    // sz[i] = number of objects in subtree rooted at i
     private int count;   // number of components
-
-    private int[] connected; // connection map
-
+    
+	// Assigment: Instance variables
+	private int[] connected; // connection map
     private int total;
-
     private boolean giantComponentReached = false;
     private boolean nonIsolatedReached = false;
 
     // Create an empty union find data structure with N isolated sets.
     public WeightedQuickUnionUF(int N) {
-        total = N;
+        total = N; // assignment: save the total amount of elements
         count = N;
         id = new int[N];
         sz = new int[N];
@@ -42,6 +41,9 @@ public class WeightedQuickUnionUF {
         return nonIsolatedReached;
     }
 
+	// Assignment: Returns true if all elements are connected
+	// the 'connected' stated is reached when the component counter
+	// equals 1: One component contains all elements
     public boolean isConnected() {
         return count == 1;
     }
@@ -54,7 +56,7 @@ public class WeightedQuickUnionUF {
     // Return component identifier for component containing p
     public int find(int p) {
         while (p != id[p])
-            p = id[id[p]];
+            p = id[id[p]]; // Assignment: added tree-depth reduction fix
         return p;
     }
 
@@ -83,12 +85,16 @@ public class WeightedQuickUnionUF {
         connected[p] = 1;
         connected[q] = 1;
 
+		// oy vey! nisht gefloygn...
+		// second if is always true
         if (!nonIsolatedReached) {
             if (connected.length >= total) {
                 nonIsolatedReached = true;
             }
         }
 
+		// A giant component is present when the size of a newly unified
+		// component is greater-than or equal to total/2.
         if (!giantComponentReached) {
             if (sz[i] >= total / 2) {
                 giantComponentReached = true;
