@@ -12,9 +12,12 @@ public class WeightedQuickUnionUF {
     private int[] sz;    // sz[i] = number of objects in subtree rooted at i
     private int count;   // number of components
 
+    private int[] connected; // connection map
+
     private int total;
 
     private boolean giantComponentReached = false;
+    private boolean nonIsolatedReached = false;
 
     // Create an empty union find data structure with N isolated sets.
     public WeightedQuickUnionUF(int N) {
@@ -22,14 +25,25 @@ public class WeightedQuickUnionUF {
         count = N;
         id = new int[N];
         sz = new int[N];
+
+        connected = new int[N];
+
         for (int i = 0; i < N; i++) {
             id[i] = i;
             sz[i] = 1;
         }
     }
 
-    public boolean isGiantComponentReached() {
+    public boolean isGiantComponent() {
         return giantComponentReached;
+    }
+
+    public boolean isNonIsolated() {
+        return nonIsolatedReached;
+    }
+
+    public boolean isConnected() {
+        return count == 1;
     }
 
     // Return the number of disjoint sets.
@@ -40,6 +54,7 @@ public class WeightedQuickUnionUF {
     // Return component identifier for component containing p
     public int find(int p) {
         while (p != id[p])
+            id[i] = id[id[i]];
             p = id[p];
         return p;
     }
@@ -49,7 +64,7 @@ public class WeightedQuickUnionUF {
         return find(p) == find(q);
     }
 
-  
+
    // Replace sets containing p and q with their union.
     public void union(int p, int q) {
         int i = find(p);
@@ -66,6 +81,15 @@ public class WeightedQuickUnionUF {
         }
         count--;
 
+        connected[p] = 1;
+        connected[q] = 1;
+
+        if (!nonIsolatedReached) {
+            if (connected.length >= total) {
+                nonIsolatedReached = true;
+            }
+        }
+
         if (!giantComponentReached) {
             if (sz[i] >= total / 2) {
                 giantComponentReached = true;
@@ -79,7 +103,7 @@ public class WeightedQuickUnionUF {
         WeightedQuickUnionUF uf = new WeightedQuickUnionUF(N);
 
         // read in a sequence of pairs of integers (each in the range 0 to N-1),
-         // calling find() for each pair: If the members of the pair are not already
+        // calling find() for each pair: If the members of the pair are not already
         // call union() and print the pair.
         while (!StdIn.isEmpty()) {
             int p = StdIn.readInt();
